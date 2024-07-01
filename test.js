@@ -1,97 +1,146 @@
 const request = require('supertest');
-
-describe('Admins API', () => {
-  it('should return 200 and admin data when credentials are correct', async () => { // ควรส่งคืนรหัสสถานะ 200 และข้อมูลผู้ดูแลระบบเมื่อข้อมูลรับรองถูกต้อง
+describe('Driver API', () => {
+  it('ควรส่งคืนรหัสสถานะ 200 และข้อมูลผู้ขับขี่เมื่อข้อมูลถูกต้อง', async () => {
     const response = await request('http://localhost:3000')
-      .post('/admins')
+      .post('/drivers')
       .send({
-        username: 'hello21',
+        email: 'hello21@gmail.com',
         password: '12321',
         firstname: '21321',
         lastname: '232',
-        role: 'admin'
+        phonenumber: '0943680010',
+        vehicle_id: 1
       });
 
     expect(response.statusCode).toBe(200);
   });
 
-  it('should return 400 when username is missing', async () => { // ควรส่งคืนรหัสสถานะ 400 เมื่อไม่มีชื่อผู้ใช้
+  it('ควรส่งคืนรหัสสถานะ 400 เมื่ออีเมลมีอยู่แล้ว', async () => {
     const response = await request('http://localhost:3000')
-      .post('/admins')
+      .post('/drivers')
+      .send({
+        email: 'boss123d@gmail.com',
+        password: '12321',
+        firstname: '21321',
+        lastname: '232',
+        phonenumber: '0943680010',
+        vehicle_id: 1
+      });
+
+    expect(response.statusCode).toBe(400);
+  });
+
+  it('ควรส่งคืนรหัสสถานะ 400 เมื่ออีเมลไม่ถูกต้อง', async () => {
+    const response = await request('http://localhost:3000')
+      .post('/drivers')
+      .send({
+        email: 'hello21@gmail.com',
+        password: '12321',
+        firstname: '21321',
+        lastname: '232',
+        phonenumber: '0943680010',
+        vehicle_id: 1
+      });
+
+    expect(response.statusCode).toBe(400);
+  });
+
+  it('ควรส่งคืนรหัสสถานะ 400 เมื่อไม่มีอีเมล', async () => {
+    const response = await request('http://localhost:3000')
+      .post('/drivers')
       .send({
         password: '12321',
         firstname: '21321',
         lastname: '232',
-        role: 'admin'
+        phonenumber: '0943680010',
+        vehicle_id: 1
       });
 
     expect(response.statusCode).toBe(400);
   });
 
-  it('should return 400 when password is missing', async () => { // ควรส่งคืนรหัสสถานะ 400 เมื่อไม่มีรหัสผ่าน
+  it('ควรส่งคืนรหัสสถานะ 400 เมื่อไม่มีรหัสผ่าน', async () => {
     const response = await request('http://localhost:3000')
-      .post('/admins')
+      .post('/drivers')
       .send({
-        username: 'hello21',
+        email: 'hello21@gmail.com',
         firstname: '21321',
         lastname: '232',
-        role: 'admin'
+        phonenumber: '0943680010',
+        vehicle_id: 1
       });
 
     expect(response.statusCode).toBe(400);
   });
 
-  it('should return 400 when firstname is missing', async () => { // ควรส่งคืนรหัสสถานะ 400 เมื่อไม่มีชื่อจริง
+  it('ควรส่งคืนรหัสสถานะ 400 เมื่อไม่มีชื่อจริง', async () => {
     const response = await request('http://localhost:3000')
-      .post('/admins')
+      .post('/drivers')
       .send({
-        username: 'hello21',
+        email: 'hello21@gmail.com',
         password: '12321',
         lastname: '232',
-        role: 'admin'
+        phonenumber: '0943680010',
+        vehicle_id: 1
       });
 
     expect(response.statusCode).toBe(400);
   });
 
-  it('should return 400 when lastname is missing', async () => { // ควรส่งคืนรหัสสถานะ 400 เมื่อไม่มีนามสกุล
+  it('ควรส่งคืนรหัสสถานะ 400 เมื่อไม่มีนามสกุล', async () => {
     const response = await request('http://localhost:3000')
-      .post('/admins')
+      .post('/drivers')
       .send({
-        username: 'hello21',
+        email: 'hello21@gmail.com',
         password: '12321',
         firstname: '21321',
-        role: 'admin'
+        phonenumber: '0943680010',
+        vehicle_id: 1
       });
 
     expect(response.statusCode).toBe(400);
   });
 
-  it('should return 400 when role is missing', async () => { // ควรส่งคืนรหัสสถานะ 400 เมื่อไม่มีบทบาท
+  it('ควรส่งคืนรหัสสถานะ 400 เมื่อไม่มีเบอร์โทรศัพท์', async () => {
     const response = await request('http://localhost:3000')
-      .post('/admins')
+      .post('/drivers')
       .send({
-        username: 'hello21',
-        password: '12321',
-        firstname: '21321',
-        lastname: '232',
-      });
-
-    expect(response.statusCode).toBe(400);
-  });
-
-  it('should return 400 when role is invalid', async () => { // ควรส่งคืนรหัสสถานะ 400 เมื่อบทบาทไม่ถูกต้อง
-    const response = await request('http://localhost:3000')
-      .post('/admins')
-      .send({
-        username: 'hello21',
+        email: 'hello21@gmail.com',
         password: '12321',
         firstname: '21321',
         lastname: '232',
-        role: 'invalid_role'
+        vehicle_id: 1
       });
 
     expect(response.statusCode).toBe(400);
   });
 
+  it('ควรส่งคืนรหัสสถานะ 400 เมื่อไม่มีรหัสยานพาหนะ', async () => {
+    const response = await request('http://localhost:3000')
+      .post('/drivers')
+      .send({
+        email: 'hello21@gmail.com',
+        password: '12321',
+        firstname: '21321',
+        lastname: '232',
+        phonenumber: '0943680010'
+      });
+
+    expect(response.statusCode).toBe(400);
+  });
+
+  it('ควรส่งคืนรหัสสถานะ 400 เมื่อเบอร์โทรศัพท์ไม่ถูกต้อง', async () => {
+    const response = await request('http://localhost:3000')
+      .post('/drivers')
+      .send({
+        email: 'hello21@gmail.com',
+        password: '12321',
+        firstname: '21321',
+        lastname: '232',
+        phonenumber: '0943680010a',
+        vehicle_id: 1
+      });
+
+    expect(response.statusCode).toBe(400);
+  });
 });
